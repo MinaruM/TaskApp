@@ -89,6 +89,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         reloadListView()
+
+        
     }
 
     private fun reloadListView() {
@@ -104,6 +106,8 @@ class MainActivity : AppCompatActivity() {
         // 表示を更新するために、アダプターにデータが変更されたことを知らせる
         mTaskAdapter.notifyDataSetChanged()
     }
+
+
 
     override fun onDestroy() {
         super.onDestroy()
