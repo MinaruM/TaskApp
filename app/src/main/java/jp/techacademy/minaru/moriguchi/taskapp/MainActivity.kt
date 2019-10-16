@@ -2,14 +2,12 @@ package jp.techacademy.minaru.moriguchi.taskapp
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
-import io.realm.RealmChangeListener
-import io.realm.Sort
 import android.content.Intent
 import android.support.v7.app.AlertDialog
 import android.app.AlarmManager
 import android.app.PendingIntent
+import io.realm.*
 
 const val EXTRA_TASK = "jp.techacademy.minaru.moriguchi.taskapp.TASK"
 
@@ -90,7 +88,20 @@ class MainActivity : AppCompatActivity() {
 
         reloadListView()
 
-        
+        search_button.setOnClickListener(){
+            val taskRealmResults = mRealm.where(Task::class.java).equalTo("category", search_item).findAll()
+
+            // 上記の結果を、TaskList としてセットする
+            mTaskAdapter.taskList = mRealm.copyFromRealm(taskRealmResults)
+
+            // TaskのListView用のアダプタに渡す
+            listView1.adapter = mTaskAdapter
+
+            // 表示を更新するために、アダプターにデータが変更されたことを知らせる
+            mTaskAdapter.notifyDataSetChanged()
+        }
+
+
     }
 
     private fun reloadListView() {
@@ -108,10 +119,10 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     override fun onDestroy() {
         super.onDestroy()
 
         mRealm.close()
     }
 }
+
